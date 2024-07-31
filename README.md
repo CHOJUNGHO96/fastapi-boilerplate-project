@@ -64,7 +64,7 @@
 ----------
 ## 프로젝트 아키텍처 구조
 
-![img.png](img.png)
+![image](https://github.com/user-attachments/assets/deabd4d3-ef45-4192-a0e3-9885e625034d)
 
 - endpoint : 클라이언트의 요청을 받아 서비스 레이어로 전달하는 역할만 합니다.
 ```python
