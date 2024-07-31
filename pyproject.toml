@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "fastapi-boilerplate-project"
+version = "0.1.0"
+description = ""
+authors = ["jhcho <jo4186@naver.com>"]
+readme = "README.md"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+asyncpg = "^0.29.0"
+bcrypt = "^4.1.2"
+black = {extras = ["d"], version = "^24.4.2"}
+dependency-injector = "^4.41.0"
+fastapi = "^0.105.0"
+flake8 = "^7.0.0"
+geoip2 = "^4.8.0"
+isort = "^5.13.2"
+mypy = "^1.7.1"
+orjson = "^3.9.10"
+passlib = "^1.7.4"
+pre-commit = "^3.6.2"
+pydantic = "^2.5.2"
+pydantic-core = "^2.14.5"
+pydantic-settings = "^2.1.0"
+python = "^3.11"
+python-jose = "^3.3.0"
+python-multipart = "^0.0.6"
+pytz = "^2023.3.post1"
+redis = "^5.0.1"
+requests-toolbelt = "^1.0.0"
+sqlalchemy = "^2.0.23"
+starlette-context = "^0.3.6"
+toml-sort = "^0.23.1"
+user-agents = "^2.2.0"
+uvicorn = "^0.24.0.post1"
+
+[tool.poetry.dev-dependencies]
+sqlacodegen-v2 = "^0.1.4"
