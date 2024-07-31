@@ -1,3 +1,4 @@
+# coding=utf-8
 from fastapi import Depends, Request
 from fastapi.responses import JSONResponse
 

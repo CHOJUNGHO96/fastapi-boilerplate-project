@@ -1,6 +1,7 @@
+# coding=utf-8
 from fastapi import APIRouter, Depends
 
-from app.auth.services.auth_facade import AuthFacade
+from app.auth.facades.auth_facade import AuthFacade
 
 router = APIRouter()
 

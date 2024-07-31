@@ -1,3 +1,4 @@
+# coding=utf-8
 from typing import Annotated
 
 from pydantic import Field

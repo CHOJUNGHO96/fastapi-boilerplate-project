@@ -1,10 +1,11 @@
+# coding=utf-8
 from dependency_injector.wiring import inject
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.auth.model.user_model import ModelTokenData
-from app.auth.services.auth_facade import AuthFacade
+from app.auth.facades.auth_facade import AuthFacade
 
 router = APIRouter()
 
