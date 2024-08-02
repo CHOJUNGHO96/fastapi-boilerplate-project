@@ -19,9 +19,9 @@ class AuthFacade:
         self.user_cache_service = user_cache_service
         self.token_service = token_service
 
-    async def login(self, reqest: Request, username: str, password: str):
+    async def login(self, request: Request, username: str, password: str):
         user_entity: UserEntity = await self.auth_service.authenticate(user_id=username, user_passwd=password)
-        user_entity: UserEntity = await self.token_service.get_token(reqest, user_entity=user_entity)
+        user_entity: UserEntity = await self.token_service.get_token(request, user_entity=user_entity)
         await self.user_cache_service.save_user_in_redis(user_entity=user_entity)
         response: JSONResponse = ResponsJson.extract_response_fields(
             response_model=ResponseLoginModel, entity=user_entity
