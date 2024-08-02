@@ -1,9 +1,7 @@
 # coding=utf-8
 from typing import Annotated
 
-from pydantic import Field
-
-from model import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ResponseLoginModel(BaseModel):
