@@ -2,9 +2,8 @@
 from dependency_injector.wiring import Provide, inject
 from fastapi import Request
 
-from app.auth.model.user_model import ModelTokenData
+from app.auth.domain.user_entity import UserEntity
 from app.auth.util.jwt import create_access_token
-from infrastructure.db.schema.user import UserInfo
 
 
 class TokenService:
@@ -12,10 +11,10 @@ class TokenService:
     async def get_token(
         self,
         request: Request,
-        user_info: UserInfo | dict[str, str],
+        user_entity: UserEntity,
         config=Provide["config"],
-    ) -> ModelTokenData:
-        request.state.user = user_info.to_dict() if isinstance(user_info, UserInfo) else user_info
+    ) -> UserEntity:
+        request.state.user = user_entity.to_dict()
         token_type = "bearer"
         access_token = create_access_token(
             jwt_secret_key=config["JWT_ACCESS_SECRET_KEY"],
@@ -35,9 +34,8 @@ class TokenService:
             user_type=int(request.state.user["user_type"]),
             expire=config["JWT_REFRESH_TOKEN_EXPIRE_MINUTES"],
         )
-        return ModelTokenData(
-            user_id=request.state.user["user_id"],
-            token_type=token_type,
-            access_token=access_token,
-            refresh_token=refresh_token,
-        )
+        user_entity.access_token = access_token
+        user_entity.refresh_token = refresh_token
+        user_entity.token_type = token_type
+        user_entity.user_id = int(request.state.user["user_id"])
+        return user_entity

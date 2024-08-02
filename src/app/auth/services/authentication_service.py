@@ -3,9 +3,9 @@ from dependency_injector.wiring import inject
 from fastapi import Depends
 from passlib.context import CryptContext
 
+from app.auth.domain.user_entity import UserEntity
 from app.auth.usecase import UserUseCase
 from errors import BadPassword, NotFoundUserEx
-from infrastructure.db.schema.user import UserInfo
 
 
 class AuthService:
@@ -24,13 +24,15 @@ class AuthService:
         self,
         user_id: str,
         user_passwd: str,
-    ) -> UserInfo:
-        user_info: UserInfo | None = await self.user_usecase.get_one(login_id=user_id)
-        if not user_info:
+    ) -> UserEntity:
+        user_entity: UserEntity | None = await self.user_usecase.get_one(login_id=user_id)
+        if not user_entity:
             raise NotFoundUserEx()
-        assert user_info.password, "password is invalid"
-        if not await self.__verify_password(user_passwd, user_info.password):
-            assert user_info.login_id, "login_id is None"
+        assert user_entity.password, "password is invalid"
+        if not await self.__verify_password(user_passwd, user_entity.password):
+            assert user_entity.login_id, "login_id is None"
             raise NotFoundUserEx()
-        assert user_info.login_id is not None, "login_id is None"
-        return user_info
+        user_entity.password = None
+        assert user_entity.login_id is not None, "login_id is None"
+
+        return user_entity

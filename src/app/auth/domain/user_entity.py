@@ -1,12 +1,21 @@
-from typing import Annotated
-
-from pydantic import Field
-
-from model import BaseModel
+from dataclasses import asdict, dataclass, field
 
 
-class ModelTokenData(BaseModel):
-    user_id: Annotated[int, Field(example="유저번호")]
-    token_type: Annotated[str, Field(example="토큰타입")]
-    access_token: Annotated[str, Field(example="토큰")]
-    refresh_token: Annotated[str, Field(example="리프레시토큰")]
+@dataclass
+class UserEntity:
+    user_id: int
+    login_id: str = field(default=None)
+    password: str = field(default=None)
+    user_name: str = field(default=None)
+    email: str = field(default=None)
+    user_type: int = field(default=None)
+    token_type: str = field(default=None)
+    access_token: str = field(default=None)
+    refresh_token: str = field(default=None)
+
+    @classmethod
+    def from_dict(cls, d):
+        return cls(**d)
+
+    def to_dict(self):
+        return asdict(self)

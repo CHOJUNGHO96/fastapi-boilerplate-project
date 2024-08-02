@@ -2,6 +2,7 @@
 from fastapi import Depends, Request
 from fastapi.responses import JSONResponse
 
+from app.auth.domain.user_entity import UserEntity
 from app.auth.services import AuthService, TokenService, UserCacheService
 
 
@@ -17,13 +18,13 @@ class AuthFacade:
         self.token_service = token_service
 
     async def login(self, reqest: Request, username: str, password: str):
-        user_info = await self.auth_service.authenticate(user_id=username, user_passwd=password)
-        token_data = await self.token_service.get_token(reqest, user_info=user_info)
-        await self.user_cache_service.save_user_in_redis(user_info, token_data)
-        response = JSONResponse(content=token_data.dict())
-        response.set_cookie("token_type", token_data.token_type)
-        response.set_cookie("access_token", token_data.access_token)
-        response.set_cookie("refresh_token", token_data.refresh_token)
+        user_entity: UserEntity = await self.auth_service.authenticate(user_id=username, user_passwd=password)
+        user_entity: UserEntity = await self.token_service.get_token(reqest, user_entity=user_entity)
+        await self.user_cache_service.save_user_in_redis(user_entity=user_entity)
+        response = JSONResponse(content=user_entity.to_dict())
+        response.set_cookie("token_type", user_entity.token_type)
+        response.set_cookie("access_token", user_entity.access_token)
+        response.set_cookie("refresh_token", user_entity.refresh_token)
 
         return response
 
