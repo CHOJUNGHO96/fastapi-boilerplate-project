@@ -42,6 +42,7 @@ class UserUseCase:
                     "user_id": user_entity.user_id,
                     "login_id": user_entity.login_id,
                     "user_name": user_entity.user_name,
+                    "user_type": user_entity.user_type,
                     "email": user_entity.email,
                     "access_token": user_entity.access_token,
                     "refresh_token": user_entity.refresh_token,

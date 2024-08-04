@@ -13,3 +13,9 @@ class ResponseLoginModel(BaseModel):
     token_type: Annotated[str, Field(example="토큰타입")]
     access_token: Annotated[str, Field(example="토큰")]
     refresh_token: Annotated[str, Field(example="리프레시토큰")]
+
+
+class ResponseTokenModel(BaseModel):
+    token_type: Annotated[str, Field(example="토큰타입")]
+    access_token: Annotated[str, Field(example="토큰")]
+    refresh_token: Annotated[str, Field(example="리프레시토큰")]

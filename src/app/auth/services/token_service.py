@@ -11,10 +11,10 @@ class TokenService:
     async def get_token(
         self,
         request: Request,
-        user_entity: UserEntity,
+        user_entity: UserEntity | dict,
         config=Provide["config"],
     ) -> UserEntity:
-        request.state.user = user_entity.to_dict()
+        request.state.user = user_entity.to_dict() if isinstance(user_entity, UserEntity) else user_entity
         token_type = "bearer"
         access_token = create_access_token(
             jwt_secret_key=config["JWT_ACCESS_SECRET_KEY"],
@@ -22,7 +22,7 @@ class TokenService:
             user_id=int(request.state.user["user_id"]),
             login_id=request.state.user["login_id"],
             user_name=request.state.user["user_name"],
-            user_type=int(request.state.user["user_type"]),
+            user_type=int(request.state.user["user_type"]) if "user_type" in request.state.user else None,
             expire=config["JWT_ACCESS_TOKEN_EXPIRE_MINUTES"],
         )
         refresh_token = create_access_token(
@@ -31,7 +31,7 @@ class TokenService:
             user_id=int(request.state.user["user_id"]),
             login_id=request.state.user["login_id"],
             user_name=request.state.user["user_name"],
-            user_type=int(request.state.user["user_type"]),
+            user_type=int(request.state.user["user_type"]) if "user_type" in request.state.user else None,
             expire=config["JWT_REFRESH_TOKEN_EXPIRE_MINUTES"],
         )
         user_entity.access_token = access_token
