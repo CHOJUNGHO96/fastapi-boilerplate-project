@@ -29,6 +29,14 @@ class UserUseCase:
         return user_entity
 
     @inject
+    async def user_insert(
+        self,
+        insert_user_entity: dict,
+        user_repository: UserRepository = Provide["auth.user_repository"],
+    ) -> bool:
+        return await user_repository.insert_user(insert_user_entity)
+
+    @inject
     async def set_user_in_redis(
         self,
         user_entity: UserEntity,

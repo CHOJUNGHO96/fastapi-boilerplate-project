@@ -2,7 +2,7 @@ from dependency_injector.wiring import inject
 from fastapi import APIRouter, Depends, Request
 
 from app.auth.facades.auth_facade import AuthFacade
-from app.auth.model.user_model import ResponseTokenModel
+from app.auth.model import ResponseTokenModel
 
 router = APIRouter()
 

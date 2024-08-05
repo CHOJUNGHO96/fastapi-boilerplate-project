@@ -3,9 +3,10 @@ from fastapi import Depends, Request
 from fastapi.responses import JSONResponse
 
 from app.auth.domain.user_entity import UserEntity
-from app.auth.model.user_model import ResponseLoginModel, ResponseTokenModel
+from app.auth.model import ResponseLoginModel, ResponseTokenModel
+from app.auth.model.request import RequestRegisterModel
 from app.auth.responses import ResponsJson
-from app.auth.services import AuthService, TokenService, UserCacheService
+from app.auth.services import AuthService, TokenService, UserCacheService, UserService
 
 
 class AuthFacade:
@@ -14,10 +15,12 @@ class AuthFacade:
         auth_service: AuthService = Depends(),
         user_cache_service: UserCacheService = Depends(),
         token_service: TokenService = Depends(),
+        user_service: UserService = Depends(),
     ):
         self.auth_service = auth_service
         self.user_cache_service = user_cache_service
         self.token_service = token_service
+        self.user_service = user_service
 
     async def login(self, request: Request, username: str, password: str):
         authenticated_user: UserEntity = await self.auth_service.authenticate(user_id=username, user_passwd=password)
@@ -55,3 +58,7 @@ class AuthFacade:
             return response
         else:
             return JSONResponse(status_code=422, content={"status": 422, "msg": "Token not in cookie"})
+
+    async def register(self, request: RequestRegisterModel):
+        if await self.user_service.register(request):
+            return JSONResponse(content={"status": 200, "msg": "Success Register."})

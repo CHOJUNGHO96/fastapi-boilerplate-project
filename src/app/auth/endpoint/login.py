@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.auth.facades.auth_facade import AuthFacade
-from app.auth.model.user_model import ResponseLoginModel
+from app.auth.model import ResponseLoginModel
 
 router = APIRouter()
 

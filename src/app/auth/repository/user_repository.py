@@ -2,10 +2,11 @@
 from contextlib import AbstractAsyncContextManager
 from typing import Callable
 
-from sqlalchemy import select
+from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.domain.user_entity import UserEntity
+from errors import InternalQuerryEx
 from infrastructure.db.schema.user import UserInfo
 
 
@@ -32,3 +33,11 @@ class Repository:
                     user_type=user_info.user_type,
                 )
                 return user_entity
+
+    async def insert_user(self, insert_user_entity: dict) -> bool:
+        try:
+            async with self.session_factory() as session:
+                await session.execute(insert(UserInfo).values(**insert_user_entity))
+                return True
+        except InternalQuerryEx as e:
+            raise InternalQuerryEx(ex=e)
