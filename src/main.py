@@ -15,10 +15,14 @@ container = Container()
 config = conf()
 
 
-def create_app(_config) -> FastAPI:
-    _app = FastAPI(title=_config.PROJECT_NAME)
+def create_app() -> FastAPI:
+    _app: FastAPI = FastAPI()
 
     _app.container = container
+
+    _config = container.config()
+
+    _app.title = _config["PROJECT_NAME"]
 
     _app.add_middleware(
         CORSMiddleware,
@@ -36,7 +40,7 @@ def create_app(_config) -> FastAPI:
             return _app.openapi_schema
         openapi_schema = get_openapi(
             title="Fastapi-Boilerplate-Project",
-            version=_config.VERSION,
+            version=_config["VERSION"],
             routes=_app.routes,
         )
         _app.openapi_schema = openapi_schema
@@ -47,7 +51,7 @@ def create_app(_config) -> FastAPI:
     return _app
 
 
-app = create_app(config)
+app = create_app()
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True, access_log=False)

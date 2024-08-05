@@ -1,9 +1,6 @@
-[tool.poetry]
-name = "fastapi-boilerplate-project"
-version = "0.1.0"
-description = ""
-authors = ["jhcho <jo4186@naver.com>"]
-readme = "README.md"
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
 
 [tool.black]
 line-length = 120
@@ -11,9 +8,12 @@ line-length = 120
 [tool.isort]
 profile = "black"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry]
+authors = ["jhcho <jo4186@naver.com>"]
+description = ""
+name = "fastapi-boilerplate-project"
+readme = "README.md"
+version = "0.1.0"
 
 [tool.poetry.dependencies]
 asyncpg = "^0.29.0"
@@ -31,6 +31,7 @@ pre-commit = "^3.6.2"
 pydantic = "^2.5.2"
 pydantic-core = "^2.14.5"
 pydantic-settings = "^2.1.0"
+pytest = "^8.3.2"
 python = "^3.11"
 python-jose = "^3.3.0"
 python-multipart = "^0.0.6"
