@@ -6,26 +6,24 @@ from app.auth.domain.user_entity import UserEntity
 from app.auth.model import ResponseLoginModel, ResponseTokenModel
 from app.auth.model.request import RequestRegisterModel
 from app.auth.responses import ResponsJson
-from app.auth.services import AuthService, TokenService, UserCacheService, UserService
+from app.auth.services import AuthService, TokenService, UserService
 
 
 class AuthFacade:
     def __init__(
         self,
         auth_service: AuthService = Depends(),
-        user_cache_service: UserCacheService = Depends(),
         token_service: TokenService = Depends(),
         user_service: UserService = Depends(),
     ):
         self.auth_service = auth_service
-        self.user_cache_service = user_cache_service
         self.token_service = token_service
         self.user_service = user_service
 
     async def login(self, request: Request, username: str, password: str):
         authenticated_user: UserEntity = await self.auth_service.authenticate(user_id=username, user_passwd=password)
         user_with_token: UserEntity = await self.token_service.get_token(request, user_entity=authenticated_user)
-        await self.user_cache_service.save_user_in_redis(user_entity=user_with_token)
+        await self.user_service.save_user_in_redis(user_entity=user_with_token)
         response: JSONResponse = ResponsJson.extract_response_fields(
             response_model=ResponseLoginModel, entity=user_with_token
         )
@@ -48,7 +46,7 @@ class AuthFacade:
             user_with_token: UserEntity = await self.token_service.get_token(
                 request, user_entity=user_entity_from_state
             )
-            await self.user_cache_service.save_user_in_redis(user_entity=user_with_token)
+            await self.user_service.save_user_in_redis(user_entity=user_with_token)
             response: JSONResponse = ResponsJson.extract_response_fields(
                 response_model=ResponseTokenModel, entity=user_with_token
             )
