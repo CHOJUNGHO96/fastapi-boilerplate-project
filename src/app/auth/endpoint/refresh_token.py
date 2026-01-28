@@ -39,9 +39,29 @@ async def refresh_token(
     # Step 3: Generate HTTP response (Presentation logic)
     response: JSONResponse = ResponsJson.extract_response_fields(response_model=ResponseTokenModel, entity=result.user)
 
-    # Step 4: Update HTTP cookies (HTTP concern)
-    response.set_cookie("token_type", result.token_type)
-    response.set_cookie("access_token", result.access_token)
-    response.set_cookie("refresh_token", result.refresh_token)
+    # Step 4: Update HTTP cookies (HTTP concern) with security flags
+    response.set_cookie(
+        "token_type",
+        result.token_type,
+        httponly=True,
+        secure=True,
+        samesite="strict",
+    )
+    response.set_cookie(
+        "access_token",
+        result.access_token,
+        httponly=True,
+        secure=True,
+        samesite="strict",
+        max_age=15 * 60,  # 15 minutes
+    )
+    response.set_cookie(
+        "refresh_token",
+        result.refresh_token,
+        httponly=True,
+        secure=True,
+        samesite="strict",
+        max_age=3000 * 60,  # 3000 minutes
+    )
 
     return response

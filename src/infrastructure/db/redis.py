@@ -26,19 +26,24 @@ async def init_redis_pool(host: str, password: str, port: int) -> AsyncIterator[
 async def get_user_cache(login_id: str, conf: get_config, redis=Provide["redis"]) -> str | None:
     """
     유저정보 캐시로 관리
+
+    Note: This function is deprecated. Use CacheService.get_user_cache() instead.
     """
     if redis is None:
         raise ValueError("Redis 인스턴스가 초기화되지 않았습니다.")
+
     cache_user = await redis.get(f"cache_user_info_{login_id}")
+
+    # Fixed Bug #1: Do not store None to Redis
+    # Previously, if cache_user was None, it would set None to Redis (incorrect behavior)
+    # Now, simply return None if cache doesn't exist
     if cache_user is None:
-        await redis.set(
-            name=f"cache_user_info_{login_id}",
-            value=cache_user,
-            ex=conf["redis_expire_time"],
-        )
-        cache_user = await redis.get(f"cache_user_info_{login_id}")
+        return None
+
+    # Handle bytes or string response
     if isinstance(cache_user, bytes):
-        cache_user = cache_user.decode()
-        return cache_user
+        return cache_user.decode()
     elif isinstance(cache_user, str):
         return cache_user
+
+    return None

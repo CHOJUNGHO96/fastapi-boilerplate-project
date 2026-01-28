@@ -28,7 +28,17 @@ class CacheService:
             user: UserEntity with user information and tokens
             redis: Redis connection (injected)
             config: Application config (injected)
+
+        Raises:
+            ValueError: If user is None (Bug #1 prevention)
         """
+        # Bug #1 Prevention: Do not allow None values to be cached
+        if user is None:
+            raise ValueError(f"Cannot cache None value for user")
+
+        if not user.login_id:
+            raise ValueError("Cannot cache user without login_id")
+
         cache_key = f"cache_user_info_{user.login_id}"  # Fixed typo: "cahce" -> "cache"
         cache_value = str(
             {
