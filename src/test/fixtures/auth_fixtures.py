@@ -4,10 +4,10 @@ import pytest
 from typing import Dict, Any
 from httpx import AsyncClient
 
-from test.helpers.test_data_generator import generate_user_data
-from test.helpers.auth_helper import AuthHelper
-from test.helpers.db_helper import ensure_clean_database
-from test.helpers.redis_helper import RedisHelper
+from helpers.test_data_generator import generate_user_data
+from helpers.auth_helper import AuthHelper
+from helpers.db_helper import ensure_clean_database
+from helpers.redis_helper import RedisHelper
 
 
 @pytest.fixture

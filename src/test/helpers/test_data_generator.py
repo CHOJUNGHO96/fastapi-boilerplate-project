@@ -10,7 +10,7 @@ def generate_user_data(
     email: str = None,
     password: str = None,
     user_name: str = None,
-    user_type: str = "CUSTOMER",
+    user_type: int = 1,  # Changed to int, 1 = CUSTOMER
 ) -> Dict[str, Any]:
     """
     Generate valid user data for registration.
@@ -20,7 +20,7 @@ def generate_user_data(
         email: User email (default: random)
         password: User password (default: "ValidPass123!")
         user_name: User name (default: random)
-        user_type: User type (default: "CUSTOMER")
+        user_type: User type (default: 1 = CUSTOMER)
 
     Returns:
         Dictionary with valid user data

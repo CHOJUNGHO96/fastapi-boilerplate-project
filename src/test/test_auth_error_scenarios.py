@@ -4,9 +4,9 @@ import pytest
 from httpx import AsyncClient
 import time
 
-from test.helpers.auth_helper import AuthHelper
-from test.helpers.test_data_generator import generate_user_data
-from test.helpers.redis_helper import RedisHelper
+from helpers.auth_helper import AuthHelper
+from helpers.test_data_generator import generate_user_data
+from helpers.redis_helper import RedisHelper
 
 
 # ============================================================================
@@ -206,7 +206,7 @@ async def test_refresh_token_user_not_found(async_client: AsyncClient, clean_db,
     NOTE: This requires creating a token for a user, then deleting the user.
     Complex setup - documenting expected behavior.
     """
-    from test.helpers.db_helper import delete_user_from_db
+    from helpers.db_helper import delete_user_from_db
 
     # Register and login user
     user_data = generate_user_data()

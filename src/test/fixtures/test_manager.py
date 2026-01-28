@@ -57,8 +57,8 @@ class TestUser:
             print(user.access_token)  # JWT 토큰 사용 가능
             ```
         """
-        from test.helpers.test_data_generator import generate_user_data
-        from test.helpers.auth_helper import AuthHelper
+        from helpers.test_data_generator import generate_user_data
+        from helpers.auth_helper import AuthHelper
 
         user_data = generate_user_data()
 
@@ -108,8 +108,8 @@ class TestUser:
             await user.login(async_client)
             ```
         """
-        from test.helpers.test_data_generator import generate_user_data
-        from test.helpers.auth_helper import AuthHelper
+        from helpers.test_data_generator import generate_user_data
+        from helpers.auth_helper import AuthHelper
 
         user_data = generate_user_data()
 
@@ -165,7 +165,7 @@ class TestUser:
             await user.login(async_client)  # 이제 토큰 사용 가능
             ```
         """
-        from test.helpers.auth_helper import AuthHelper
+        from helpers.auth_helper import AuthHelper
 
         login_response = await AuthHelper.login_user(
             client,
@@ -193,7 +193,7 @@ class TestUser:
             await user.logout(async_client)  # 토큰 무효화
             ```
         """
-        from test.helpers.auth_helper import AuthHelper
+        from helpers.auth_helper import AuthHelper
 
         response = await AuthHelper.logout_user(client, cookies=self.get_cookies())
         assert response.status_code == 200, f"Logout failed: {response.text}"
@@ -215,7 +215,7 @@ class TestUser:
             await user.refresh_tokens(async_client)  # 새 토큰 발급
             ```
         """
-        from test.helpers.auth_helper import AuthHelper
+        from helpers.auth_helper import AuthHelper
 
         if not self.refresh_token:
             raise ValueError("No refresh_token available. User must be logged in.")

@@ -5,7 +5,7 @@ Enhancement #3: Time manipulation utility for expired token testing
 만료된 토큰 테스트를 위한 시간 조작 유틸리티
 """
 
-import jwt
+from jose import jwt
 from datetime import datetime, timedelta
 from typing import Optional
 

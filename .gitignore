@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# MCP Server state and cache
+.mcp_state.json
+mcp_server/__pycache__/
+mcp_server/**/__pycache__/
+
 # C extensions
 *.so
 

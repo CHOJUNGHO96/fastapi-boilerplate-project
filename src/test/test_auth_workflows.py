@@ -4,9 +4,9 @@ import pytest
 from httpx import AsyncClient
 import asyncio
 
-from test.helpers.auth_helper import AuthHelper
-from test.helpers.test_data_generator import generate_user_data
-from test.helpers.redis_helper import RedisHelper
+from helpers.auth_helper import AuthHelper
+from helpers.test_data_generator import generate_user_data
+from helpers.redis_helper import RedisHelper
 
 
 # ============================================================================

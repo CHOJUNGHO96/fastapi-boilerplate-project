@@ -11,9 +11,9 @@ import pytest
 from httpx import AsyncClient
 
 from errors import ErrorCode
-from test.fixtures.test_manager import TestUser, TestManager
-from test.helpers.token_helper import TokenHelper
-from test.helpers.auth_helper import AuthHelper
+from fixtures.test_manager import TestUser, TestManager
+from helpers.token_helper import TokenHelper
+from helpers.auth_helper import AuthHelper
 
 
 # ============================================================================
@@ -131,7 +131,7 @@ async def test_demo_error_code_duplicate_user(async_client: AsyncClient, clean_d
     user = await TestUser.create_only(async_client)
 
     # 같은 login_id로 재등록 시도
-    from test.helpers.test_data_generator import generate_user_data
+    from helpers.test_data_generator import generate_user_data
 
     duplicate_data = generate_user_data(
         login_id=user.login_id,  # 중복

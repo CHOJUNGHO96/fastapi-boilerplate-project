@@ -31,15 +31,14 @@ This is a **layered Clean Architecture** FastAPI project with a single `auth` mo
 ### Request Flow
 
 ```
-HTTP Request → Middleware (JWT validation) → Endpoint → Facade → Service(s) → UseCase → Repository → DB
+HTTP Request → Middleware (JWT validation) → Endpoint → UseCase → Service(s) → Repository → DB
 ```
 
 ### Layer Responsibilities
 
-- **Endpoint** (`app/{module}/endpoint/`): Route handlers, receives Pydantic request models, delegates to facades
-- **Facade** (`app/{module}/facades/`): Orchestrates multiple services into a single operation (e.g., `AuthFacade` coordinates `AuthService`, `TokenService`, `UserService`)
+- **Endpoint** (`app/{module}/endpoint/`): Route handlers, receives Pydantic request models, delegates to UseCases
+- **UseCase** (`app/{module}/usecases/`): Orchestrates business workflows, coordinates multiple services for complete use cases (e.g., login, register, logout)
 - **Service** (`app/{module}/services/`): Business logic (password verification, token generation, Redis caching)
-- **UseCase** (`app/{module}/usecase/`): Data retrieval/insertion intermediary between services and repositories
 - **Repository** (`app/{module}/repository/`): Raw SQL queries via async SQLAlchemy sessions
 - **Domain** (`app/{module}/domain/`): Plain dataclass entities with `to_dict()`/`from_dict()` conversion
 - **Model** (`app/{module}/model/request|response/`): Pydantic v2 request/response schemas
@@ -65,7 +64,7 @@ Uses `dependency-injector` library with constructor-based DI and `@inject` decor
 - JWT access + refresh tokens via `python-jose` and `passlib` bcrypt
 - `middleware.py` validates tokens on every request, sets `request.state.user`
 - Public routes hardcoded in middleware: `/docs`, `/redoc`, `/api/v1/auth/login`, `/api/v1/auth/register`
-- Redis caches user info on login with key pattern `cahce_user_info_{login_id}` (note: typo is in codebase)
+- Redis caches user info on login with key pattern `cache_user_info_{login_id}`
 
 ### Error Handling
 
@@ -84,3 +83,12 @@ Custom `APIException` hierarchy in `src/errors.py`. Middleware catches these and
 - Routes are aggregated in `app/{module}/routes.py` and registered in `src/presentation.py`
 - Logging uses structured JSON format via `LogAdapter` in `src/logs/log.py` (includes KST timestamps)
 - Korean language comments exist throughout the codebase
+
+## Archive
+
+Historical documentation and completed work can be found in the `archive/` directory:
+
+- **project_analysis_report.md** - Comprehensive project analysis (improvements implemented in commit `0c8c8ef`)
+- **USECASE_ANALYSIS_AND_REFACTORING.md** - UseCase pattern refactoring guide (refactoring completed)
+
+See `archive/README.md` for full index and usage guidelines.

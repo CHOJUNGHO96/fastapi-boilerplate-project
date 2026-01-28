@@ -3,7 +3,7 @@
 import pytest
 from typing import Dict, Any
 
-from test.helpers.test_data_generator import (
+from helpers.test_data_generator import (
     generate_user_data,
     generate_invalid_email,
     generate_short_password,

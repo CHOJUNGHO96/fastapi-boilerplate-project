@@ -3,8 +3,8 @@
 import pytest
 from httpx import AsyncClient
 
-from test.helpers.auth_helper import AuthHelper
-from test.helpers.test_data_generator import (
+from helpers.auth_helper import AuthHelper
+from helpers.test_data_generator import (
     generate_user_data,
     generate_invalid_email,
     generate_short_password,
@@ -361,7 +361,7 @@ async def test_login_redis_cache_created(async_client: AsyncClient, clean_db, re
     NOTE: This test may fail due to known bug in src/infrastructure/db/redis.py:33-36
     where None is stored to cache. Using workaround.
     """
-    from test.helpers.redis_helper import RedisHelper
+    from helpers.redis_helper import RedisHelper
 
     # Register and login
     user_data = generate_user_data()
@@ -661,7 +661,7 @@ async def test_logout_redis_cache_removed(async_client: AsyncClient, authenticat
 
     Expected: Cache entry deleted
     """
-    from test.helpers.redis_helper import RedisHelper
+    from helpers.redis_helper import RedisHelper
 
     user_data = authenticated_user["user_data"]
     tokens = authenticated_user["tokens"]
