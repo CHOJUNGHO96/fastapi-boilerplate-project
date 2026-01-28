@@ -1,7 +1,8 @@
 """Authentication helper utilities for E2E testing."""
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Union
 from httpx import AsyncClient, Response
+from fastapi.testclient import TestClient
 
 # Import ErrorCode for better test assertions
 from errors import ErrorCode
@@ -11,25 +12,25 @@ class AuthHelper:
     """Helper class for authentication-related test operations."""
 
     @staticmethod
-    async def register_user(
-        client: AsyncClient,
+    def register_user(
+        client: Union[AsyncClient, TestClient],
         user_data: Dict[str, Any],
     ) -> Response:
         """
         Register a new user.
 
         Args:
-            client: AsyncClient instance
+            client: AsyncClient or TestClient instance
             user_data: User registration data
 
         Returns:
             Response from registration endpoint
         """
-        return await client.post("/api/v1/auth/register", json=user_data)
+        return client.post("auth/register", json=user_data)
 
     @staticmethod
-    async def login_user(
-        client: AsyncClient,
+    def login_user(
+        client: Union[AsyncClient, TestClient],
         username: str,
         password: str,
     ) -> Response:
@@ -37,15 +38,15 @@ class AuthHelper:
         Login user using OAuth2 form format.
 
         Args:
-            client: AsyncClient instance
+            client: AsyncClient or TestClient instance
             username: User login_id
             password: User password
 
         Returns:
             Response from login endpoint with cookies
         """
-        return await client.post(
-            "/api/v1/auth/login",
+        return client.post(
+            "auth/login",
             data={
                 "username": username,
                 "password": password,
@@ -53,41 +54,41 @@ class AuthHelper:
         )
 
     @staticmethod
-    async def logout_user(
-        client: AsyncClient,
+    def logout_user(
+        client: Union[AsyncClient, TestClient],
         cookies: Optional[Dict[str, str]] = None,
     ) -> Response:
         """
         Logout user.
 
         Args:
-            client: AsyncClient instance
+            client: AsyncClient or TestClient instance
             cookies: Optional cookies to include in request
 
         Returns:
             Response from logout endpoint
         """
         if cookies:
-            return await client.post("/api/v1/auth/logout", cookies=cookies)
-        return await client.post("/api/v1/auth/logout")
+            return client.post("auth/logout", cookies=cookies)
+        return client.post("auth/logout")
 
     @staticmethod
-    async def refresh_token(
-        client: AsyncClient,
+    def refresh_token(
+        client: Union[AsyncClient, TestClient],
         refresh_token: str,
     ) -> Response:
         """
         Refresh access token using refresh token.
 
         Args:
-            client: AsyncClient instance
+            client: AsyncClient or TestClient instance
             refresh_token: Refresh token from login
 
         Returns:
             Response from refresh_token endpoint
         """
-        return await client.get(
-            "/api/v1/auth/refresh_token",
+        return client.get(
+            "auth/refresh_token",
             cookies={"refresh_token": refresh_token},
         )
 
@@ -176,22 +177,22 @@ class AuthHelper:
             ), f"Expected '{expected_message_contains}' in message, got: {message}"
 
     @staticmethod
-    async def register_and_login(
-        client: AsyncClient,
+    def register_and_login(
+        client: Union[AsyncClient, TestClient],
         user_data: Dict[str, Any],
     ) -> tuple[Response, Response, Dict[str, str]]:
         """
         Register a user and immediately login.
 
         Args:
-            client: AsyncClient instance
+            client: AsyncClient or TestClient instance
             user_data: User registration data
 
         Returns:
             Tuple of (register_response, login_response, tokens_dict)
         """
-        register_response = await AuthHelper.register_user(client, user_data)
-        login_response = await AuthHelper.login_user(
+        register_response = AuthHelper.register_user(client, user_data)
+        login_response = AuthHelper.login_user(
             client,
             user_data["login_id"],
             user_data["password"],

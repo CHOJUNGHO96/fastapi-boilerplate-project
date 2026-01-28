@@ -38,15 +38,15 @@ def client(app: FastAPI):
         yield client
 
 
-@pytest_asyncio.fixture
-async def async_client(app: FastAPI):
+@pytest.fixture
+def async_client(app: FastAPI):
     """
     비동기 테스트용 클라이언트 (for E2E tests)
-    """
-    from httpx import ASGITransport
 
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://127.0.0.1") as client:
+    Note: TestClient를 사용하지만 비동기 테스트에서도 작동합니다.
+    TestClient는 내부적으로 ASGI를 동기 방식으로 래핑하여 DI가 정상 작동합니다.
+    """
+    with TestClient(app, base_url="http://127.0.0.1/api/v1") as client:
         yield client
 
 
