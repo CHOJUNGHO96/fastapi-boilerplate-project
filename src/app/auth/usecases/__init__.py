@@ -1,0 +1,1 @@
+# UseCases for Auth module

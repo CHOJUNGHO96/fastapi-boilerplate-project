@@ -16,8 +16,10 @@ class Container(containers.DeclarativeContainer):
             "infrastructure.db.redis",
             # auth
             "app.auth.endpoint",
-            "app.auth.usecase",
+            "app.auth.usecases",  # Updated to plural after refactoring
             "app.auth.services",
+            # health
+            "app.health",
         ],
     )
 

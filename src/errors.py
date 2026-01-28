@@ -105,3 +105,13 @@ class InternalQuerryEx(APIException):
             msg="Query error",
             ex=ex,
         )
+
+
+class ValidationError(APIException):
+    def __init__(self, msg: str = "Validation error", ex: Exception = Exception()):
+        super().__init__(
+            status_code=StatusCode.HTTP_400,
+            code=f"{StatusCode.HTTP_400}{'1'.zfill(4)}",
+            msg=msg,
+            ex=ex,
+        )

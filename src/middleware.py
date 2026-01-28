@@ -17,7 +17,7 @@ from errors import (
     NotAuthorization,
     NotFoundUserEx,
 )
-from infrastructure.db.redis import get_user_cahce
+from infrastructure.db.redis import get_user_cache
 from logs.log import LogAdapter
 
 
@@ -48,7 +48,7 @@ async def dispatch_middlewares(request: Request, call_next):
     try:
         if url == "/api/v1/auth/refresh_token":
             pass
-        elif await url_pattern_check(url, "^(/docs|/redoc|/api/v1/auth)") or url in [
+        elif await url_pattern_check(url, "^(/docs|/redoc|/api/v1/auth|/api/v1/health)") or url in [
             "/",
             "/openapi.json",
         ]:
@@ -77,7 +77,7 @@ async def dispatch_middlewares(request: Request, call_next):
                 login_id: str | None = payload.get("login_id")
                 if login_id is None:
                     raise NotAuthorization()
-                user_info = await get_user_cahce(login_id=login_id, conf=config)
+                user_info = await get_user_cache(login_id=login_id, conf=config)
                 request.state.user = ast.literal_eval(user_info)
                 if not user_info:
                     raise NotFoundUserEx()

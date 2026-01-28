@@ -26,9 +26,10 @@ def create_app() -> FastAPI:
 
     _app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
-        allow_methods=("GET", "POST", "PUT", "DELETE"),
-        allow_headers=["*"],
+        allow_origins=_config["BACKEND_CORS_ORIGINS"] if _config["BACKEND_CORS_ORIGINS"] else ["http://localhost:3000"],
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
+        allow_headers=["Accept", "Authorization", "Content-Type", "X-Requested-With"],
     )
 
     _app.add_middleware(middleware_class=BaseHTTPMiddleware, dispatch=dispatch_middlewares)

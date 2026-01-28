@@ -23,19 +23,23 @@ async def delete_data(container: containers):
 
 @pytest.mark.asyncio
 async def test_registration(client: TestClient):
+    """Test user registration with new UseCase-based architecture."""
     await delete_data(client.app.container)
     response = client.post(
         url="auth/register",
         json={
-            "user_email": "test@test.com",
+            "email": "test@test.com",  # Fixed: was "user_email"
             "login_id": "test",
-            "user_password": "test123!",
+            "password": "test123!",  # Fixed: was "user_password"
             "user_name": "테스트유저",
+            "user_type": 1,  # Added: required field
         },
     )
     response_body = response.json()
     assert response.status_code == 200
     assert response_body["msg"] == "Success Register."
+    assert "user_id" in response_body  # New: UseCase returns user_id
+    assert "login_id" in response_body  # New: UseCase returns login_id
 
 
 @pytest.mark.asyncio

@@ -21,8 +21,9 @@ class AsyncEngine:
             str(config["SQLALCHEMY_DATABASE_URI"]),
             future=True,
             pool_pre_ping=True,
-            pool_size=10,
-            max_overflow=30,
+            pool_size=20,
+            max_overflow=50,
+            pool_recycle=3600,  # Recycle connections after 1 hour
             connect_args={
                 "server_settings": {
                     "timezone": "Asia/Seoul",

@@ -3,15 +3,19 @@ from os import environ
 from typing import Any, List
 from urllib.parse import quote
 
-from pydantic import AnyHttpUrl, FieldValidationInfo, PostgresDsn, field_validator
+from pydantic import AnyHttpUrl, Field, FieldValidationInfo, PostgresDsn, field_validator
 from pydantic_settings import BaseSettings
 
 
 class Config(BaseSettings):
-    JWT_ALGORITHM: str = ""
-    JWT_ACCESS_SECRET_KEY: str = ""
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_SECRET_KEY: str = Field(
+        ..., min_length=32, description="JWT access token secret key (minimum 32 characters)"
+    )
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
-    JWT_REFRESH_SECRET_KEY: str = ""
+    JWT_REFRESH_SECRET_KEY: str = Field(
+        ..., min_length=32, description="JWT refresh token secret key (minimum 32 characters)"
+    )
     JWT_REFRESH_TOKEN_EXPIRE_MINUTES: int = 3000
     TEST: bool = False
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
@@ -26,6 +30,13 @@ class Config(BaseSettings):
         elif isinstance(v, (list, str)):
             return v
         raise ValueError(v)
+
+    @field_validator("JWT_ACCESS_SECRET_KEY", "JWT_REFRESH_SECRET_KEY")
+    @classmethod
+    def validate_secret_keys(cls, v: str) -> str:
+        if not v or len(v) < 32:
+            raise ValueError("Secret keys must be at least 32 characters long for security")
+        return v
 
     PROJECT_NAME: str = "Fastapi-Boilerplate-Project"
     VERSION: str = "1.0.0"
